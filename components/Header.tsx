@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { Sparkles, Menu, X, Bot } from "lucide-react";
+import { useAuth } from "@/app/context/AuthContext";
+import Link from "next/link";
 
 export default function Header() {
+  const { user, signOut } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -76,17 +79,41 @@ export default function Header() {
 
           {/* CTAs */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="text-sm font-semibold text-slate-300 hover:text-white transition-colors duration-200">
-              Sign In
-            </button>
-            <a
-              href="#playground"
-              className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-bold text-white rounded-xl group bg-gradient-to-br from-purple-600 to-pink-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-purple-800"
-            >
-              <span className="relative px-5 py-2 transition-all ease-in duration-75 bg-[#030014] rounded-[10px] group-hover:bg-opacity-0">
-                Start Free Trial
-              </span>
-            </a>
+            {user ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-semibold text-slate-300 hover:text-white transition-colors duration-200"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => signOut()}
+                  className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-bold text-white rounded-xl group bg-gradient-to-br from-purple-600 to-pink-500 hover:text-white focus:ring-4 focus:outline-none"
+                >
+                  <span className="relative px-5 py-2 transition-all ease-in duration-75 bg-[#030014] rounded-[10px] group-hover:bg-opacity-0">
+                    Sign Out
+                  </span>
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/sign-in"
+                  className="text-sm font-semibold text-slate-300 hover:text-white transition-colors duration-200"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-bold text-white rounded-xl group bg-gradient-to-br from-purple-600 to-pink-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-purple-800"
+                >
+                  <span className="relative px-5 py-2 transition-all ease-in duration-75 bg-[#030014] rounded-[10px] group-hover:bg-opacity-0">
+                    Start Free Trial
+                  </span>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -153,16 +180,43 @@ export default function Header() {
             FAQ
           </a>
           <div className="pt-4 pb-2 border-t border-white/5 flex flex-col space-y-2 px-3">
-            <button className="w-full text-center py-2 text-base font-semibold text-slate-300 hover:text-white transition-colors duration-200">
-              Sign In
-            </button>
-            <a
-              href="#playground"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full block text-center py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold text-sm"
-            >
-              Start Free Trial
-            </a>
+            {user ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2 text-base font-semibold text-slate-300 hover:text-white transition-colors duration-200"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    signOut();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full block text-center py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold text-sm"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/sign-in"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2 text-base font-semibold text-slate-300 hover:text-white transition-colors duration-200"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/sign-up"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full block text-center py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold text-sm"
+                >
+                  Start Free Trial
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
